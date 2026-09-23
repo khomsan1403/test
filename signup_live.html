@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>ลงทะเบียนสมาชิก · ร้านน้อยนมสด</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Trirong:wght@600&display=swap">
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<style>
+:root{
+  --ground:#F7F4EE; --panel:#FFFFFF; --panel-2:#F0EAE0; --sunk:#EAE3D7;
+  --ink:#1E1A14; --ink-2:#4B4338; --muted:#6F6759; --faint:#9A9182;
+  --rule:#E2DACC; --rule-2:#D2C9B9;
+  --amber:#A85C0F; --amber-bg:#F7EADA; --amber-line:#DDB483;
+  --blue:#0F6DA3; --blue-bg:#E4EFF7; --blue-line:#9DC4DD;
+  --green:#2C7350; --green-bg:#E2F0E8; --green-line:#93C4AC;
+  --red:#A63030; --red-bg:#F6E4E2;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#151109; --panel:#1E1913; --panel-2:#28221A; --sunk:#120E08;
+    --ink:#F3EDE1; --ink-2:#D8CFBF; --muted:#A69C8B; --faint:#7B7263;
+    --rule:#352D22; --rule-2:#463C2E;
+    --amber:#E0A052; --amber-bg:#33260F; --amber-line:#6B4E1F;
+    --blue:#63ACD9; --blue-bg:#0F2531; --blue-line:#2A5670;
+    --green:#63BE92; --green-bg:#102A1E; --green-line:#2C5B44;
+    --red:#E08585; --red-bg:#301A18;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#151109; --panel:#1E1913; --panel-2:#28221A; --sunk:#120E08;
+  --ink:#F3EDE1; --ink-2:#D8CFBF; --muted:#A69C8B; --faint:#7B7263;
+  --rule:#352D22; --rule-2:#463C2E;
+  --amber:#E0A052; --amber-bg:#33260F; --amber-line:#6B4E1F;
+  --blue:#63ACD9; --blue-bg:#0F2531; --blue-line:#2A5670;
+  --green:#63BE92; --green-bg:#102A1E; --green-line:#2C5B44;
+  --red:#E08585; --red-bg:#301A18;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:"Anuphan","Noto Sans Thai",system-ui,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;margin:0}
+.shell{max-width:480px;margin:0 auto;padding:28px 18px 48px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.tag{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin:0 0 6px}
+h1{font-family:"Trirong",Georgia,serif;font-weight:600;font-size:24px;margin:0 0 6px;letter-spacing:-.01em}
+.lede{margin:0 0 20px;color:var(--muted);font-size:13.5px;max-width:48ch}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:20px}
+.identity{display:flex;align-items:center;gap:12px;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid var(--rule)}
+.avatar{flex:none;width:44px;height:44px;border-radius:50%;background:var(--blue-bg);border:1.5px solid var(--blue-line);display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:"Trirong",serif;font-weight:600;font-size:17px;color:var(--blue)}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.identity .who{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;margin:0 0 2px}
+.identity .name{font-weight:600;font-size:15px}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-2);margin:0 0 6px}
+.field{margin-bottom:14px}
+input[type=tel]{width:100%;font-family:"IBM Plex Mono",monospace;font-size:17px;background:var(--sunk);border:1.5px solid var(--rule-2);border-radius:9px;padding:12px 13px;color:var(--ink)}
+input::placeholder{color:var(--faint);font-family:"Anuphan",sans-serif;font-size:14px}
+input:focus{outline:none;border-color:var(--amber);background:var(--panel)}
+.hint{font-size:11.5px;color:var(--faint);margin-top:5px}
+button.submit{width:100%;margin-top:4px;font-family:"Anuphan",sans-serif;font-weight:700;font-size:16px;background:var(--ink);color:var(--ground);border:none;border-radius:10px;padding:14px;cursor:pointer;transition:opacity .15s}
+button.submit:hover{opacity:.9}
+button.submit:disabled{opacity:.45;cursor:not-allowed}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) button.submit{color:#22190A}}
+:root[data-theme="dark"] button.submit{color:#22190A}
+.msg{margin-top:12px;padding:10px 13px;border-radius:8px;font-size:13px}
+.msg.ok{background:var(--green-bg);color:var(--green);border:1px solid var(--green-line)}
+.msg.err{background:var(--red-bg);color:var(--red);border:1px solid var(--red)}
+.msg[hidden]{display:none}
+.foot{margin-top:18px;text-align:center;font-size:12px;color:var(--faint)}
+</style>
+</head>
+<body>
+<div class="shell">
+  <p class="tag">ร้านน้อยนมสด · ลงทะเบียนรับสิทธิ์เฉพาะคุณ</p>
+  <h1>ลงทะเบียนสมาชิก</h1>
+  <p class="lede">เปิดจากในแอป LINE ระบบจะรู้ตัวตนคุณอัตโนมัติ เหลือแค่กรอกเบอร์โทรครั้งเดียว ใช้เวลาไม่ถึงนาที</p>
+
+  <div class="card" id="card">
+    <div class="identity">
+      <div class="avatar" id="av">–</div>
+      <div>
+        <p class="who">กำลังลงทะเบียนในนาม</p>
+        <p class="name" id="nm">กำลังเชื่อมต่อ LINE…</p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="f-phone">เบอร์โทรของคุณ</label>
+      <input type="tel" id="f-phone" inputmode="numeric" placeholder="08XXXXXXXX" maxlength="10">
+      <p class="hint">ใช้ผูกกับบัตรสะสมแต้ม รับสิทธิ์และโปรโมชั่นเฉพาะคุณ</p>
+    </div>
+
+    <button class="submit" id="f-submit" type="button" disabled>กำลังเชื่อมต่อ…</button>
+    <p class="msg ok" id="msg-ok" hidden></p>
+    <p class="msg err" id="msg-err" hidden></p>
+  </div>
+
+  <p class="foot">มีปัญหาการใช้งาน ติดต่อพนักงานร้านได้เลย</p>
+</div>
+
+<script>
+(function(){
+  // ===================== ตั้งค่าก่อนใช้งานจริง (ดู SETUP_GUIDE.md) =====================
+  var LIFF_ID = "REPLACE_WITH_YOUR_LIFF_ID";                     // จาก LINE Developers Console > LIFF tab
+  var SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzHI6qAErIG4JFCcQJEYlnAcNt9IycmLQooXh-csAghu5niy6dfVTsACv9JDw3CsCI/exec";   // จาก Google Apps Script > Deploy > Web app
+  // =======================================================================================
+
+  var els = {
+    av: document.getElementById('av'),
+    nm: document.getElementById('nm'),
+    phone: document.getElementById('f-phone'),
+    submit: document.getElementById('f-submit'),
+    ok: document.getElementById('msg-ok'),
+    err: document.getElementById('msg-err')
+  };
+
+  var profile = null;
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  function showMsg(el, text){
+    els.ok.hidden = true; els.err.hidden = true;
+    el.textContent = text; el.hidden = false;
+    setTimeout(function(){ el.hidden = true; }, 4500);
+  }
+
+  function validate(){
+    var phone = els.phone.value.trim();
+    if (!/^[0-9]{9,10}$/.test(phone)) return 'กรอกเบอร์โทรให้ครบ 9-10 หลัก';
+    return null;
+  }
+
+  function setIdentity(p){
+    profile = p;
+    if (p.pictureUrl){
+      els.av.innerHTML = '<img src="' + p.pictureUrl + '" alt="">';
+    } else {
+      els.av.textContent = (p.displayName || '?').charAt(0);
+    }
+    els.nm.textContent = p.displayName || 'ไม่ทราบชื่อ';
+  }
+
+  function setReady(){
+    els.submit.disabled = false;
+    els.submit.textContent = 'ลงทะเบียน';
+  }
+
+  async function submitSignup(){
+    var problem = validate();
+    if (problem){ showMsg(els.err, problem); return; }
+    if (!profile){ showMsg(els.err, 'ยังเชื่อมต่อ LINE ไม่สำเร็จ ลองรีเฟรชหน้านี้'); return; }
+    if (SHEET_WEBHOOK_URL.indexOf('REPLACE_WITH') === 0){
+      showMsg(els.err, 'ยังไม่ได้ตั้งค่าปลายทางบันทึกข้อมูล (ดู SETUP_GUIDE.md)');
+      return;
+    }
+
+    els.submit.disabled = true;
+    els.submit.textContent = 'กำลังบันทึก…';
+    var body = {
+      lineUserId: profile.userId,
+      lineName: profile.displayName,
+      phone: els.phone.value.trim(),
+      ts: Date.now()
+    };
+    try {
+      // หมายเหตุ: Google Apps Script Web App ไม่รองรับ CORS แบบเต็ม จึงยิงแบบ no-cors
+      // (แปลว่าอ่าน response กลับมาเช็คไม่ได้ ถือว่าสำเร็จถ้า fetch ไม่ throw — ให้เช็คผลจริงที่ Google Sheet)
+      await fetch(SHEET_WEBHOOK_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(body)
+      });
+      els.phone.value = '';
+      showMsg(els.ok, 'ลงทะเบียนสำเร็จ ยินดีต้อนรับคุณ ' + (profile.displayName || ''));
+    } catch (e) {
+      showMsg(els.err, 'บันทึกไม่สำเร็จ เช็คอินเทอร์เน็ตแล้วลองใหม่');
+    } finally {
+      els.submit.disabled = false;
+      els.submit.textContent = 'ลงทะเบียน';
+    }
+  }
+
+  els.submit.addEventListener('click', submitSignup);
+  els.phone.addEventListener('keydown', function(e){ if (e.key === 'Enter') submitSignup(); });
+
+  async function boot(){
+    if (LIFF_ID.indexOf('REPLACE_WITH') === 0) {
+      els.nm.textContent = 'ยังไม่ได้ตั้งค่า LIFF ID (ดู SETUP_GUIDE.md)';
+      return;
+    }
+    try {
+      await liff.init({ liffId: LIFF_ID });
+      if (!liff.isLoggedIn()) {
+        liff.login();
+        return; // liff.login() จะ redirect ออกไปเข้าสู่ระบบแล้วโหลดหน้านี้กลับมาเอง
+      }
+      var p = await liff.getProfile();
+      setIdentity(p);
+      setReady();
+    } catch (e) {
+      console.error(e);
+      els.nm.textContent = 'เชื่อมต่อ LINE ไม่สำเร็จ ลองเปิดหน้านี้ใหม่อีกครั้ง';
+    }
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>
